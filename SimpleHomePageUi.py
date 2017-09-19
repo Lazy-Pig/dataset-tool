@@ -45,7 +45,13 @@ class UiHomePage(QtGui.QWidget):
         # self.progressBar_HBoxLayout.addWidget(self.progressBar)
         # self.central_widget.addLayout(self.progressBar_HBoxLayout)
 
-        #　添加label单选框
+        # 添加一个UI的label
+        self.label_HBoxLayout = QtGui.QHBoxLayout()
+        self.label = QtGui.QLabel(QtCore.QString(u"请选择接下来要做的动作："))
+        self.label_HBoxLayout.addWidget(self.label)
+        self.central_widget.addLayout(self.label_HBoxLayout)
+
+        #　添加数据流标签单选框
         moods = [
             QtGui.QRadioButton(QtCore.QString(u"打开微博")),
             QtGui.QRadioButton(QtCore.QString(u"发送微博")),
