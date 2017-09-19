@@ -26,25 +26,6 @@ class UiHomePage(QtGui.QWidget):
         XStream.stdout().messageWritten.connect(self.log_TextBrower.insertPlainText)
         XStream.stderr().messageWritten.connect(self.log_TextBrower.insertPlainText)
 
-        # #　添加进度条
-        # self.progressBar_HBoxLayout = QtGui.QHBoxLayout()
-        # self.progressBar = QtGui.QProgressBar()
-        # self.progressBar.setProperty("value", 0)
-        # style = """
-        #         QProgressBar {
-        #             border: 2px solid grey;
-        #             border-radius: 5px;
-        #             text-align: center;
-        #         }
-        #
-        #         QProgressBar::chunk {
-        #             background-color: #88B0EB;
-        #             width: 20px;
-        #         }"""
-        # self.progressBar.setStyleSheet(style)
-        # self.progressBar_HBoxLayout.addWidget(self.progressBar)
-        # self.central_widget.addLayout(self.progressBar_HBoxLayout)
-
         # 添加一个UI的label
         self.label_HBoxLayout = QtGui.QHBoxLayout()
         self.label = QtGui.QLabel(QtCore.QString(u"请选择接下来要做的动作："))
