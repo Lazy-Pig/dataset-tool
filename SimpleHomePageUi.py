@@ -45,6 +45,23 @@ class UiHomePage(QtGui.QWidget):
         # self.progressBar_HBoxLayout.addWidget(self.progressBar)
         # self.central_widget.addLayout(self.progressBar_HBoxLayout)
 
+        #　添加label单选框
+        moods = [
+            QtGui.QRadioButton(QtCore.QString(u"打开微博")),
+            QtGui.QRadioButton(QtCore.QString(u"发送微博")),
+            QtGui.QRadioButton(QtCore.QString(u"点赞微博")),
+            QtGui.QRadioButton(QtCore.QString(u"转发微博")),
+            QtGui.QRadioButton(QtCore.QString(u"刷新微博首页")),
+            QtGui.QRadioButton(QtCore.QString(u"查看主页"))
+        ]
+        self.moods_HBoxLayout = QtGui.QHBoxLayout()
+        self.mood_button_group = QtGui.QButtonGroup()
+        for i, mood in enumerate(moods):
+            self.moods_HBoxLayout.addWidget(mood)
+            self.mood_button_group.addButton(mood, i)
+            mood.clicked.connect(self.radio_button_clicked)
+        self.central_widget.addLayout(self.moods_HBoxLayout)
+
         #　添加Start和Cancel按钮
         self.start_cancel_HBoxLayout = QtGui.QHBoxLayout()
         self.start_stop_button = QtGui.QPushButton("Start")
@@ -55,9 +72,19 @@ class UiHomePage(QtGui.QWidget):
         self.cancel_button.clicked.connect(self.click_cancel_button)
         self.central_widget.addLayout(self.start_cancel_HBoxLayout)
 
+    def radio_button_clicked(self):
+        self.label = self.mood_button_group.checkedButton().text()
+        logger.debug(QtCore.QString(u"当前数据流标签为： %s" % self.label))
+
     def click_start_stop_button(self):
         current_name = self.start_stop_button.text()
         if current_name == "Start":
+            if not self.mood_button_group.checkedButton():
+                QtGui.QMessageBox.warning(self, "",
+                                          QtCore.QString(u"请选择标签！"),
+                                          QtGui.QMessageBox.Cancel, QtGui.QMessageBox.NoButton,
+                                          QtGui.QMessageBox.NoButton)
+                return
             logger.info(QtCore.QString(u"开始截获数据包"))
             self.start_stop_button.setText("Finish")
         else:
@@ -68,6 +95,14 @@ class UiHomePage(QtGui.QWidget):
     def click_cancel_button(self):
         logger.info(QtCore.QString(u"取消截获数据包"))
         self.start_stop_button.setText("Start")
+        # 把选中的标签去掉
+        mood = self.mood_button_group.checkedButton()
+        if mood:
+            # 一定要这么写才能把选中的单选框去掉
+            self.mood_button_group.setExclusive(False)
+            mood.setChecked(False)
+            self.mood_button_group.setExclusive(True)
+
         # TODO:把从上次点击开始按钮之后到现在收到的包都扔掉
         pass
 
