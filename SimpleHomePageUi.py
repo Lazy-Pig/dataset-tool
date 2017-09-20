@@ -27,6 +27,7 @@ class UiHomePage(QtGui.QWidget):
         # 添加log窗口
         self.log_HBoxLayout = QtGui.QHBoxLayout()
         self.log_TextBrower = QtGui.QTextBrowser()
+        QtCore.QObject.connect(self.log_TextBrower, QtCore.SIGNAL("cursorPositionChanged()"), self.auto_scroll)
         self.log_HBoxLayout.addWidget(self.log_TextBrower)
         self.central_widget.addLayout(self.log_HBoxLayout)
         XStream.stdout().messageWritten.connect(self.log_TextBrower.insertPlainText)
@@ -64,6 +65,13 @@ class UiHomePage(QtGui.QWidget):
         self.start_cancel_HBoxLayout.addWidget(self.cancel_button)
         self.cancel_button.clicked.connect(self.click_cancel_button)
         self.central_widget.addLayout(self.start_cancel_HBoxLayout)
+
+    def auto_scroll(self):
+        """
+        实现log自动滚动
+        """
+        max = self.log_TextBrower.verticalScrollBar().maximum()
+        self.log_TextBrower.verticalScrollBar().setValue(max)
 
     def radio_button_clicked(self):
         self.label = self.mood_button_group.checkedButton().text()
