@@ -157,5 +157,7 @@ logger.setLevel(logging.DEBUG)
 
 if __name__ == '__main__':
     app = QtGui.QApplication([])
+    # 添加这一行代码后，即使用sudo启动界面也不会变丑了
+    app.setStyle("gtk")
     w = UiHomePage()
     app.exec_()
