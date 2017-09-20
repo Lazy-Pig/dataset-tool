@@ -1,7 +1,9 @@
 # coding: utf-8
 from PyQt4 import QtCore, QtGui
+from PacketCapturer import PacketCapturer
 import sys
 import logging
+
 
 class UiHomePage(QtGui.QWidget):
     def __init__(self, parent=None):
@@ -9,6 +11,10 @@ class UiHomePage(QtGui.QWidget):
         self.setup_ui()
         self.show()
         self.raise_()
+
+        # 启动抓包线程
+        self.packet_capturer = PacketCapturer()
+        self.packet_capturer.start()
 
     def setup_ui(self):
         # 设置窗口大小为最小
@@ -74,9 +80,15 @@ class UiHomePage(QtGui.QWidget):
                 return
             logger.info(QtCore.QString(u"开始截获数据包"))
             self.start_stop_button.setText("Finish")
+
+            # 开始抓包
+            self.packet_capturer.enable_capture()
         else:
             logger.info(QtCore.QString(u"停止截获数据包"))
             self.start_stop_button.setText("Start")
+
+            # 停止抓包
+            self.packet_capturer.disable_capture()
         # TODO:抓包并打标签为当时动作
 
     def click_cancel_button(self):
@@ -137,7 +149,7 @@ class QtHandler(logging.Handler):
         if record: XStream.stdout().write('%s\n'%record)
 
 # 设置log格式
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("log")
 handler = QtHandler()
 handler.setFormatter(logging.Formatter('[%(asctime)s][%(levelname)s][%(filename)s:%(lineno)d]%(message)s'))
 logger.addHandler(handler)
