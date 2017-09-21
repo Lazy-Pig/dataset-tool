@@ -31,7 +31,7 @@ class UiHomePage(QtGui.QWidget):
         self.log_HBoxLayout.addWidget(self.log_TextBrower)
         self.central_widget.addLayout(self.log_HBoxLayout)
         XStream.stdout().messageWritten.connect(self.log_TextBrower.insertPlainText)
-        XStream.stderr().messageWritten.connect(self.log_TextBrower.insertPlainText)
+        # XStream.stderr().messageWritten.connect(self.log_TextBrower.insertPlainText)
 
         # 添加一个UI的label
         self.label_HBoxLayout = QtGui.QHBoxLayout()
@@ -39,14 +39,13 @@ class UiHomePage(QtGui.QWidget):
         self.label_HBoxLayout.addWidget(self.label)
         self.central_widget.addLayout(self.label_HBoxLayout)
 
-        #　添加数据流标签单选框
         moods = [
-            QtGui.QRadioButton(QtCore.QString(u"打开微博")),
-            QtGui.QRadioButton(QtCore.QString(u"发送微博")),
-            QtGui.QRadioButton(QtCore.QString(u"点赞微博")),
-            QtGui.QRadioButton(QtCore.QString(u"转发微博")),
-            QtGui.QRadioButton(QtCore.QString(u"刷新微博首页")),
-            QtGui.QRadioButton(QtCore.QString(u"查看主页"))
+            QtGui.QRadioButton("open weibo"),
+            QtGui.QRadioButton("send weibo"),
+            QtGui.QRadioButton("like weibo"),
+            QtGui.QRadioButton("forward weibo"),
+            QtGui.QRadioButton("refresh weibo"),
+            QtGui.QRadioButton("profile weibo")
         ]
         self.moods_HBoxLayout = QtGui.QHBoxLayout()
         self.mood_button_group = QtGui.QButtonGroup()
@@ -93,7 +92,7 @@ class UiHomePage(QtGui.QWidget):
             self.packet_capturer.enable_capture()
         else:
             logger.info(QtCore.QString(u"停止截获数据包"))
-            self.packet_capturer.dump_packets()
+            self.packet_capturer.dump_packets(self.label)
             self.start_stop_button.setText("Start")
 
             # 停止抓包
