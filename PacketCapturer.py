@@ -40,7 +40,7 @@ class PacketCapturer(threading.Thread):
     def dump_packets(self, label):
         # 文件名格式： 随机生成一个长度为10的字符串_标签.pcap
         rand_name = ''.join(choice(ascii_uppercase + ascii_lowercase + digits) for _ in range(10))
-        file_name = 'dataset/%s_%s.pcap' % (rand_name, label)
+        file_name = '%s/%s_%s.pcap' % (config.dataset_dir, rand_name, label)
         dumper = self.pcap.dump_open(file_name)
         logger.info(QtCore.QString(u"正在将数据包dump到 %s ..." % file_name))
         while not self.queue.empty():
