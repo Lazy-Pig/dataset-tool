@@ -93,6 +93,7 @@ class UiHomePage(QtGui.QWidget):
             self.packet_capturer.enable_capture()
         else:
             logger.info(QtCore.QString(u"停止截获数据包"))
+            self.packet_capturer.dump_packets()
             self.start_stop_button.setText("Start")
 
             # 停止抓包
@@ -101,6 +102,7 @@ class UiHomePage(QtGui.QWidget):
 
     def click_cancel_button(self):
         logger.info(QtCore.QString(u"取消截获数据包"))
+        self.packet_capturer.disable_capture()
         self.start_stop_button.setText("Start")
         # 把选中的标签去掉
         mood = self.mood_button_group.checkedButton()
@@ -110,8 +112,8 @@ class UiHomePage(QtGui.QWidget):
             mood.setChecked(False)
             self.mood_button_group.setExclusive(True)
 
-        # TODO:把从上次点击开始按钮之后到现在收到的包都扔掉
-        pass
+        # 把从上次点击开始按钮之后到现在收到的包都扔掉
+        self.packet_capturer.drop_packets()
 
 
 class XStream(QtCore.QObject):
