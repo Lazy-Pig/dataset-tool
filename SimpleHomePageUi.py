@@ -17,6 +17,9 @@ class UiHomePage(QtGui.QWidget):
         self.packet_capturer.start()
 
     def setup_ui(self):
+        """
+        建立UI界面
+        """
         # 设置窗口大小为最小
         self.showMinimized()
         self.central_widget = QtGui.QVBoxLayout()
@@ -39,6 +42,7 @@ class UiHomePage(QtGui.QWidget):
         self.label_HBoxLayout.addWidget(self.label)
         self.central_widget.addLayout(self.label_HBoxLayout)
 
+        # 添加一些单选框
         moods = [
             QtGui.QRadioButton("open weibo"),
             QtGui.QRadioButton("send weibo"),
@@ -73,6 +77,9 @@ class UiHomePage(QtGui.QWidget):
         self.log_TextBrower.verticalScrollBar().setValue(max)
 
     def radio_button_clicked(self):
+        """
+        单选框被选中时执行
+        """
         self.label = self.mood_button_group.checkedButton().text()
         logger.debug(QtCore.QString(u"当前数据流标签为： %s" % self.label))
 
