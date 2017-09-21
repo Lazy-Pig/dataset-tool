@@ -56,5 +56,5 @@ class PacketCapturer(threading.Thread):
 
     def run(self):
         self.pcap = pcapy.open_live(self.device, 1500, 0, 100)
-        # pcap.setfilter("")
+        self.pcap.setfilter(config.filter_rule)
         self.pcap.loop(0, self._handle_packet)
