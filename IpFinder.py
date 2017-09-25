@@ -11,6 +11,9 @@ import pickle
 from xml.dom.minidom import parse
 
 OUTDIR = "weibo_out"
+INPUTFILE = "weibo_find_ip_list2000.saz"
+# OUTDIR = "xiaomi_out"
+# INPUTFILE = "weibo_find_ip_list2000.saz"
 
 
 class IpFinder(object):
@@ -153,7 +156,7 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO,
                         format='[%(asctime)s][%(levelname)s][%(filename)s:%(lineno)d]%(message)s',
                         datefmt='%m-%d %H:%M')
-    finder = IpFinder("weibo_find_ip_list2000.saz")
+    finder = IpFinder(INPUTFILE)
     finder.extract_saz()
     finder.parse_saz()
     finder.remove_tmpdir()
