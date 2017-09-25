@@ -49,7 +49,8 @@ class UiHomePage(QtGui.QWidget):
             QtGui.QRadioButton("like weibo"),
             QtGui.QRadioButton("forward weibo"),
             QtGui.QRadioButton("refresh weibo"),
-            QtGui.QRadioButton("profile weibo")
+            QtGui.QRadioButton("profile weibo"),
+            QtGui.QRadioButton("comment weibo")
         ]
         self.moods_HBoxLayout = QtGui.QHBoxLayout()
         self.mood_button_group = QtGui.QButtonGroup()
