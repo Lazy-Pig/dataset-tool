@@ -34,8 +34,8 @@ class PacketCapturer(threading.Thread):
             logger.debug(QtCore.QString(u"抓到包了"))
             self.queue.put((header, data))
         else:
-            pass
-            # logger.debug(QtCore.QString(u"抛弃这个包"))
+            # pass
+            logger.debug(QtCore.QString(u"抛弃这个包"))
 
     def enable_capture(self):
         self.is_capture_enable = True
