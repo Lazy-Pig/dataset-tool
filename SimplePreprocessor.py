@@ -14,11 +14,16 @@ class SimplePreprocessor(object):
     def __init__(self, dataset_dir="dataset", save_ips_path='weibo_out/save_ips.pkl'):
         self.dataset_path = dataset_dir
         self.save_ips_path = save_ips_path
+        # processed_dataset的每一个元素代表一条样本，每个样本都是一个list，list的最后一个元素是标签
+        # 每个样本包含n个tuple，一个tuple对应一条流，每个tuple含有3个list。
+        # 每个样本格式如下:
+        # [([发送与接收的数据包长度]，[发送的数据包长度]，[接收的数据包长度])...]
+        self.processed_dataset = []
         self._load_ips()
 
     def _load_ips(self):
         """
-        过滤留下的ip加载进来
+        把过滤留下的ip加载进来
         """
         with open(self.save_ips_path, 'r') as f:
             self.save_ips = pickle.load(f)
@@ -31,7 +36,7 @@ class SimplePreprocessor(object):
             logging.info("数据集目录　%s　不存在" % self.dataset_path)
             return
 
-        for pcap_file in os.listdir(self.dataset_path):
+        for file_index, pcap_file in enumerate(os.listdir(self.dataset_path)):
             if not os.path.isfile(pcap_file):
                 pass
             # 从文件名中匹配出标签，匹配从"_"到"."之间的字符串
@@ -68,15 +73,19 @@ class SimplePreprocessor(object):
                             port2tuple[port][2].append(len)
                         else:
                             raise Exception("既不是发送出去的包也不是接收到的包")
-            print label, port2tuple.values()
+            temp = port2tuple.values()
+            # 为了让每个样本的标签不同，所以在标签后面加一个文件编号（由于接下来会把所有样本的所有流进行聚类）
+            temp.append(label + str(file_index))
+            self.processed_dataset.append(temp)
+        logging.info("已将数据集转换为包长度序列")
 
-                        # logging.info("[saved]source %s:%s, destination %s:%s", src, sport, dst, dport)
-                    # else:
-                    #     logging.info("[droped]source %s:%s, destination %s:%s", src, sport, dst, dport)
+
+def main():
+    preprocessor = SimplePreprocessor()
+    preprocessor.represent_by_length()
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO,
                         format='[%(asctime)s][%(levelname)s][%(filename)s:%(lineno)d]%(message)s',
                         datefmt='%m-%d %H:%M')
-    preprocessor = SimplePreprocessor()
-    preprocessor.represent_by_length()
+    main()
