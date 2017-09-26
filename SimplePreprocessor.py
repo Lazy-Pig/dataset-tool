@@ -4,6 +4,11 @@ import logging
 import pickle
 import re
 from scapy.all import PcapReader, wrpcap, Packet, NoPayload
+"""
+TODO:
+1.去除ACK包，FIN包，以及重传包
+2.每个流中的数据包按seq排序
+"""
 
 HOSTIP = '10.42.0.166'
 
