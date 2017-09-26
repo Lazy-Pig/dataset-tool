@@ -105,7 +105,6 @@ class UiHomePage(QtGui.QWidget):
 
             # 停止抓包
             self.packet_capturer.disable_capture()
-        # TODO:抓包并打标签为当时动作
 
     def click_cancel_button(self):
         logger.info(QtCore.QString(u"取消截获数据包"))
