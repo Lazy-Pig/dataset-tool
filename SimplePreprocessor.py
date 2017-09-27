@@ -3,6 +3,8 @@ import os
 import logging
 import pickle
 import re
+import numpy as np
+from dtw import dtw
 from scapy.all import PcapReader, wrpcap, Packet, NoPayload
 """
 TODO:
@@ -84,10 +86,18 @@ class SimplePreprocessor(object):
             self.processed_dataset.append(temp)
         logging.info("已将数据集转换为包长度序列")
 
+    def calculate_dtw(self, x, y):
+        dist, cost, acc, path = dtw(x, y, dist=lambda x, y: np.linalg.norm(x - y, ord=1))
+        return dist
+
+
 
 def main():
     preprocessor = SimplePreprocessor()
     preprocessor.represent_by_length()
+    # x = np.array([1, 2, 3, 4, 5]).reshape(-1, 1)
+    # y = np.array([1, 1, 4, 2, 3, 4, 6]).reshape(-1, 1)
+    # dist, cost, acc, path = dtw(x, y, dist=lambda x, y: np.linalg.norm(x - y, ord=1))
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO,
