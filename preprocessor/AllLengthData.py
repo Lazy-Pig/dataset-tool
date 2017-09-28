@@ -10,7 +10,15 @@ from scapy.all import PcapReader
 
 class AllLengthData(object):
     """
-    将每个样本表示成收到或发送的数据包长度向量
+    将每个样本表示成收到或发送的数据包长度向量。
+
+    例如：
+    一个动作共产生了3个包，发送一个长度为20的包，接着收到一个长度为10的包，然后又收到一个长度为30的包，
+    则原始数据表达为：　
+        [[20],[-10],[30]] 标签为　动作0
+    经过归一化，填充到固定长度，标签one hot encoding后，最终数据表达为:
+        [[0.013], [-0.0065], [0.0195], 0, 0] [1, 0]
+        （归一化将每一个元素除以1500；填充至长度为5；一共有２种动作）
     """
     def __init__(self, label_num=4, max_len=200, max_value=1500):
         self.dataset_path = config.dataset_path
