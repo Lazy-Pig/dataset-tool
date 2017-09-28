@@ -5,12 +5,12 @@ import pickle
 import re
 import logging
 import numpy as np
-from scapy.all import PcapReader, wrpcap, Packet, NoPayload
+from scapy.all import PcapReader
 
 
 class AllLengthData(object):
     """
-        将每个样本表示成收到或发送的数据包长度向量
+    将每个样本表示成收到或发送的数据包长度向量
     """
     def __init__(self, label_num=4, max_len=200, max_value=1500):
         self.dataset_path = config.dataset_path
@@ -29,6 +29,8 @@ class AllLengthData(object):
         self.labels = []
         # 每个样本的长度
         self.samples_len = []
+        # 下次从第几个样本开始拿batch
+        self.batch_id = 0
 
     def init(self):
         self._load_ips()
@@ -95,4 +97,17 @@ class AllLengthData(object):
                 self.samples_len.append(seq_len)
             self.data.append(sample)
         logging.info("已将数据集转换为包长度序列")
-        
+
+    def next(self, batch_size):
+        """
+        返回一个batch的数据，直到拿到数据集的最后一批样本则再从头开始
+        ＠param batch_size　int 批的大小
+        ＠return (list, list, list) 一个batch的ｘ, 一个batch的labels，一个batch的样本的长度
+        """
+        if self.batch_id == len(self.data):
+            self.batch_id = 0
+        batch_data = (self.data[self.batch_id:min(self.batch_id + batch_size, len(self.data))])
+        batch_labels = (self.labels[self.batch_id:min(self.batch_id + batch_size, len(self.data))])
+        batch_seqlen = (self.samples_len[self.batch_id:min(self.batch_id + batch_size, len(self.data))])
+        self.batch_id = min(self.batch_id + batch_size, len(self.data))
+        return batch_data, batch_labels, batch_seqlen
