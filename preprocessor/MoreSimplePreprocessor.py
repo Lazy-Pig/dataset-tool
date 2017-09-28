@@ -54,9 +54,10 @@ class MoreSimplePreprocessor(object):
                     except:
                         continue
 
-                    if (src in self.save_ips) or (dst in self.save_ips):
-                        # 每个流中的手机发送出的IP包长度为正，手机接收到IP包长度为负
-                        tag = 1 if src == HOSTIP else -1
+                    if (src not in self.save_ips) and (dst not in self.save_ips):
+                        continue
+                    # 每个流中的手机发送出的IP包长度为正，手机接收到IP包长度为负
+                    tag = 1 if src == HOSTIP else -1
                     lens.append(tag * len)
             lens.append(label)
             print lens
