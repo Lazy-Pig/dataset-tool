@@ -50,25 +50,13 @@ class DynamicLSTM(object):
 
             for step in range(1, training_steps + 1):
                 batch_x, batch_y, batch_seqlen = self.train_dataset.next(batch_size)
-                sess.run(self.optimizer,
-                         feed_dict={
-                             self.samples_x: batch_x,
-                             self.samples_y: batch_y,
-                             self.seqs_len: batch_seqlen
-                         })
+                _, acc, loss = sess.run([self.optimizer, self.accuracy, self.cost],
+                                        feed_dict={
+                                            self.samples_x: batch_x,
+                                            self.samples_y: batch_y,
+                                            self.seqs_len: batch_seqlen
+                                        })
                 if step % display_freq == 0 or step == 1:
-                    acc = sess.run(self.accuracy,
-                                   feed_dict={
-                                       self.samples_x: batch_x,
-                                       self.samples_y: batch_y,
-                                       self.seqs_len: batch_seqlen
-                                   })
-                    loss = sess.run(self.cost,
-                                    feed_dict={
-                                        self.samples_x: batch_x,
-                                        self.samples_y: batch_y,
-                                        self.seqs_len: batch_seqlen
-                                    })
                     logging.info("Step %s, Training Loss= %f, Training Accuracy= %f" % (step * batch_size,
                                                                                         loss,
                                                                                         acc))
