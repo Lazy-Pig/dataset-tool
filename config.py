@@ -26,6 +26,13 @@ dataset_path = "dataset"
 # 过滤后的跟目标app相关的ip存储路径
 save_ips_path = 'weibo_out/save_ips.pkl'
 
+"""
+训练相关的配置
+"""
 # 数据集
 from preprocessor.AllLengthData import AllLengthData
 dataset_preprocessor = AllLengthData
+
+# 训练模型
+from model.DynamicLSTM import DynamicLSTM
+train_model = DynamicLSTM
