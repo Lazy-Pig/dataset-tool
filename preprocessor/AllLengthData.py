@@ -20,7 +20,7 @@ class AllLengthData(object):
         [[0.013], [-0.0065], [0.0195], 0, 0] [1, 0]
         （归一化将每一个元素除以1500；填充至长度为5；一共有２种动作）
     """
-    def __init__(self, label_num=4, max_len=200, max_value=1500):
+    def __init__(self, label_num=4, feature_num=1, max_len=200, max_value=1500):
         self.dataset_path = config.dataset_path
         self.save_ips_path = config.save_ips_path
         # 样本的最大长度
@@ -29,6 +29,8 @@ class AllLengthData(object):
         self.max_value = max_value
         # 数据集的类别数量
         self.label_num = label_num
+        # 每个包的特征数量，目前是只有包长度一个特征，之后可以考虑添加特征
+        self.feature_num = feature_num
         # 数据集的x
         self.data = []
         # 数据集的每个y对应的实际标签
@@ -39,6 +41,15 @@ class AllLengthData(object):
         self.samples_len = []
         # 下次从第几个样本开始拿batch
         self.batch_id = 0
+
+        self.init()
+
+    def get_obersorvation(self):
+        """
+        供外部拿到与数据集相关的shape
+        @return (int, int, int) 分别表示每个样本的长度，每个样本中元素的特征数量，标签种类数量
+        """
+        return self.max_len, self.feature_num, self.label_num
 
     def init(self):
         self._load_ips()
@@ -63,7 +74,7 @@ class AllLengthData(object):
         for pcap_file in os.listdir(self.dataset_path):
             seq_len = 0
             label = np.zeros(self.label_num)
-            sample = np.zeros((self.max_len, 1))
+            sample = np.zeros((self.max_len, self.feature_num))
 
             if not os.path.isfile(pcap_file):
                 pass
