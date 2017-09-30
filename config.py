@@ -27,8 +27,10 @@ filter_rule = "host 10.42.0.166"
 训练相关的配置
 """
 # 数据集
-from preprocessor.AllLengthData import AllLengthData
-dataset_preprocessor = AllLengthData
+# from preprocessor.AllLengthData import AllLengthData
+# dataset_preprocessor = AllLengthData
+from preprocessor.ThreeLengthSeriesData import ThreeLengthSeriesData
+dataset_preprocessor = ThreeLengthSeriesData
 
 # 训练模型
 from model.DynamicLSTM import DynamicLSTM
