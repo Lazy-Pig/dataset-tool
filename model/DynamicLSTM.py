@@ -7,6 +7,9 @@ import logging
 class DynamicLSTM(object):
     def __init__(self, train_dataset):
         self.train_dataset = train_dataset
+        # seq_len表示数据集中每个样本的长度
+        # feature_num表示样本中每个包的抽取特征个数，目前只有包长度这一个特征　
+        # class_num表示数据集中样本标签的类别
         self.seq_len, self.feature_num, self.class_num = self.train_dataset.get_obersorvation()
 
     def build_graph(self, hidden_num=64):
@@ -20,13 +23,15 @@ class DynamicLSTM(object):
         biases = {
             'out': tf.Variable(tf.random_normal([self.class_num]))
         }
-
+        # 将shape为[batchsize, seq_len，feature_num]的samples_x，变成shape为[seq_len，batchsize, feature_num]　
+        # 且会变成一个长度为seq_len的ndarray list
         x = tf.unstack(self.samples_x, self.seq_len, 1)
 
         lstm_cell = tf.contrib.rnn.BasicLSTMCell(hidden_num)
 
         outputs, states = tf.contrib.rnn.static_rnn(lstm_cell, x, dtype=tf.float32,
                                                     sequence_length=self.seqs_len)
+        # 把一个ndarray list转换成同样shape的ndarray
         outputs = tf.stack(outputs)
         outputs = tf.transpose(outputs, [1, 0, 2])
 
