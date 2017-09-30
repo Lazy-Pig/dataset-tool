@@ -33,5 +33,7 @@ from preprocessor.ThreeLengthSeriesData import ThreeLengthSeriesData
 dataset_preprocessor = ThreeLengthSeriesData
 
 # 训练模型
-from model.DynamicLSTM import DynamicLSTM
-train_model = DynamicLSTM
+# from model.DynamicLSTM import DynamicLSTM
+# train_model = DynamicLSTM
+from model.OriginModel import OriginModel
+train_model = OriginModel

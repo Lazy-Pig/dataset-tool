@@ -5,6 +5,9 @@ import logging
 
 def main():
     train_dataset = config.dataset_preprocessor()
+    model = config.train_model(train_dataset)
+    model.learn()
+
     # model = config.train_model(train_dataset)
     # model.build_graph()
     # model.learn(learning_rate=0.01, training_steps=1000, batch_size=10, display_freq=10)
