@@ -37,7 +37,7 @@ class AllLengthData(object):
         self.label_mean = {}
         # 数据集的y
         self.labels = []
-        # 每个样本的长度
+        # 每个样本的长度，没有填充０之前的真正长度
         self.samples_len = []
         # 下次从第几个样本开始拿batch
         self.batch_id = 0
